@@ -132,6 +132,11 @@ public class Monom implements function{
 	public Monom(Monom ot) {
 		this(ot.get_coefficient(), ot.get_power());
 	}
+	
+	public boolean equals(Monom m1) {
+
+		return (m1._power==_power&&m1._coefficient==_coefficient);		//chak if the power and coefficient equl 
+	}
 
 	/**
 	 * returns the Coefficient of Monom
@@ -259,7 +264,7 @@ public class Monom implements function{
 	public void multiply(Monom m){
 		int temp_power = this.get_power();
 		double temp_coaf = this.get_coefficient();
-		temp_power *= m.get_power();
+		temp_power += m.get_power();
 		temp_coaf *= m.get_coefficient();
 		this.set_power(temp_power);
 		this.set_coefficient(temp_coaf);

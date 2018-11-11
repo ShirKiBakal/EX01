@@ -205,18 +205,22 @@ public class Polynom implements Polynom_able{
 	 * check if this polynom and p1 are the same polynom
 	 */
 	public boolean equals(Polynom_able p1) {
-		boolean ans = true;
-		Iterator<Monom> iter = p1.iterator();
-		while(iter.hasNext())
+		boolean flag;
+		Iterator <Monom> itr = p1.iterator();
+		while (itr.hasNext())
 		{
-			Monom m = iter.next();
-			if(!this.poly.contains(m))
+			flag=false;
+			Monom m  = itr.next();
+			Iterator <Monom> itr2 = iterator();
+			while (itr2.hasNext())
 			{
-				return false;
+				Monom m2 = itr2.next();
+				if (m.get_coefficient()==m2.get_coefficient() && m.get_power()==m2.get_power())
+					flag = true;
 			}
+			if (flag == false) return false;
 		}
-		return ans;
-
+		return true;
 	}
 
 	/**
@@ -244,29 +248,42 @@ public class Polynom implements Polynom_able{
 	 * finds the place when the Polynom connect to x-axis. F(x)=0
 	 */
 	public double root(double x0, double x1, double eps) {
-		double y0 = this.f(x0);
-		double y1 = this.f(x1);
-		if(y0*y1>0)
+
+		if (f(x0)*f(x1)>0)
+			try {
+				throw new Exception();
+			} catch (Exception e) {
+
+				e.printStackTrace();
+			}
+		double newX = (x1+x0)/2;
+		double newY = f(newX);
+
+		if (Math.abs(newY)<Math.abs(eps)) return newX;
+		if (f(x0)>0)
 		{
-			throw new RuntimeException("Values must be on different sides of x-axis");
-		}
-		double del_x = Math.abs(x0-x1);
-		double del_y = Math.abs(y0-y1);
-		if(del_x>eps || del_y>eps)
-		{
-			double x_half = (x0+x1)/2;
-			double y_half = this.f(x_half);
-			double temp = y0*y_half;
-			if(temp<0)
+			if (newY>0)
 			{
-				return root(x0,x_half, eps);
+				return root(newX,x1,eps);
 			}
 			else
 			{
-				return root(x_half,x1, eps);
+				return root(x0,newX,eps);
 			}
 		}
-		return x0;
+		else
+		{
+			if (newY>0)
+			{
+				return root(x0,newX,eps);
+			}
+			else
+			{
+				return root(newX,x1,eps);
+			}
+		}
+
+
 	}
 
 	/**
